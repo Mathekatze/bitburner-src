@@ -1,0 +1,37 @@
+name: "update markdown documentation"
+
+on:
+  push:
+    paths:
+      'src/ScriptEditor/NetscriptDefinitions.d.ts'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+      - name: setup NodeJS (version 20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: install npm dependencies
+        run: npm ci
+      - name: update-documentation
+        run: npm run doc
+      - name: commit and push update
+        env:
+          GIT_AUTHOR_NAME: ${{ github.actor }}
+          GIT_AUTHOR_EMAIL: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
+          GIT_COMMITTER_NAME: "github-actions[bot]"
+          GIT_COMMITTER_EMAIL: "github-actions[bot]@users.noreply.github.com"
+        run: |
+          git commit markdown -m "update markdown documentation"
+          git push
+
+
