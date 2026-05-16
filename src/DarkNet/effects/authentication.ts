@@ -67,7 +67,7 @@ export const checkPassword = (
     case ModelIds.divisibilityTest: {
       const password = Number(server.password);
       const attemptedDivisor = Number(attemptedPassword);
-      if (isNaN(+attemptedPassword) || password % attemptedDivisor || attemptedPassword === "") {
+      if (isNaN(+attemptedPassword) || password % attemptedDivisor || attemptedDivisor === 0) {
         return getFailureResponse(attemptedPassword, `Password is not divisible by '${attemptedPassword}'`, "false");
       }
       return getFailureResponse(attemptedPassword, `Password IS divisible by '${attemptedPassword}'`, "true");
